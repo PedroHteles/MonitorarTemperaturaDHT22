@@ -14,7 +14,7 @@ DHT dht[] = {DHT(DHTPIN1, DHTTYPE), DHT(DHTPIN2, DHTTYPE), DHT(DHTPIN3, DHTTYPE)
 int numSensors = sizeof(dht) / sizeof(dht[0]);
 
 const char *ssid = "corporativo";
-const char *password = "arcom2022";
+const char *password = "password";
 
 WebServer server(80);
 
