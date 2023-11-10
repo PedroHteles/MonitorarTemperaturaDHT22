@@ -2,11 +2,11 @@
 #include <WebServer.h>
 #include "DHT.h"
 
-#define DHTPIN1 23
-#define DHTPIN2 21
+#define DHTPIN1 27
+#define DHTPIN2 26
 #define DHTPIN3 25
-#define DHTPIN4 26
-#define DHTPIN5 27
+#define DHTPIN4 21
+#define DHTPIN5 23
 #define DHTPIN6 33
 #define DHTTYPE DHT22
 
@@ -82,7 +82,13 @@ void handleAllSensorData()
     {
         float h = dht[i].readHumidity();
         float t = dht[i].readTemperature();
-        String sensorStatus = !isnan(h) && !isnan(t) ? ("{\"id\":" + String(i + 1) + ",\"temperature\":" + String(t) + ",\"humidity\":" + String(h) + "}") : "\"Error in sensor\"";
+        if (isnan(h) || isnan(t))
+        {
+            // Pule para o próximo item ou execute qualquer outra lógica que você precise.
+            continue;
+        }
+
+        String sensorStatus = "{\"id\":" + String(i + 1) + ",\"temperature\":" + String(t) + ",\"humidity\":" + String(h) + "}";
 
         json += sensorStatus;
 
@@ -93,6 +99,12 @@ void handleAllSensorData()
     }
 
     json += "]";
+
+    // Remover a vírgula do final, se houver
+    if (json.endsWith(",]"))
+    {
+        json = json.substring(0, json.length() - 2) + "]";
+    }
 
     server.send(200, "application/json", json);
 }
